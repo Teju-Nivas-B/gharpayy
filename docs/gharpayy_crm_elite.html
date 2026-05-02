@@ -1,1 +1,711 @@
 
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--font-sans)}
+.crm{display:flex;height:820px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-tertiary)}
+.sb{width:196px;min-width:196px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.sb-logo{padding:15px 14px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sb-brand{font-size:14px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:7px}
+.sb-dot{width:8px;height:8px;border-radius:2px;background:#D85A30}
+.sb-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;padding-left:15px}
+.sb-nav{flex:1;padding:6px 6px;overflow-y:auto}
+.sb-section{font-size:9px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.07em;text-transform:uppercase;padding:10px 8px 4px}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;cursor:pointer;font-size:12.5px;color:var(--color-text-secondary);transition:all .12s;margin-bottom:1px;position:relative}
+.ni:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.ni.on{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500}
+.ni-ic{width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ni-badge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:500;background:var(--color-background-danger);color:var(--color-text-danger)}
+.ni-badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.sb-user{padding:10px 10px 12px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.crm-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{padding:0 18px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:space-between;height:50px;flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:10px}
+.tb-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.tb-sep{width:0.5px;height:14px;background:var(--color-border-secondary)}
+.tb-sub{font-size:12px;color:var(--color-text-tertiary)}
+.tb-right{display:flex;gap:6px;align-items:center}
+.crm-body{flex:1;display:flex;overflow:hidden}
+.content{flex:1;overflow-y:auto;padding:16px 18px;min-width:0}
+.page{display:none}
+.page.on{display:block}
+.dp{width:0;min-width:0;overflow:hidden;transition:width .18s ease;background:var(--color-background-primary);border-left:0.5px solid var(--color-border-tertiary);flex-shrink:0}
+.dp.open{width:288px;min-width:288px}
+.dp-inner{width:288px;height:100%;overflow-y:auto;padding:14px}
+
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.mc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 13px;display:flex;flex-direction:column;gap:6px}
+.mc-top{display:flex;align-items:flex-start;justify-content:space-between}
+.mc-label{font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.mc-val{font-size:24px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.mc-sub{font-size:10px;color:var(--color-text-secondary)}
+.mc-trend-up{color:#3B6D11;font-size:10px;font-weight:500}
+.mc-trend-dn{color:#A32D2D;font-size:10px;font-weight:500}
+
+.funnel-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:13px 14px;margin-bottom:14px}
+.funnel-title{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.funnel-stages{display:flex;align-items:center;gap:0}
+.fs{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.fs-bar-wrap{width:100%;height:38px;display:flex;align-items:flex-end;justify-content:center}
+.fs-bar{border-radius:3px 3px 0 0;min-height:6px;width:80%;transition:all .3s}
+.fs-label{font-size:10px;color:var(--color-text-tertiary);text-align:center}
+.fs-count{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.fs-arrow{font-size:10px;color:var(--color-text-tertiary);padding-top:14px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.fs-conv{font-size:9px;color:var(--color-text-tertiary)}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.section-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:9px;display:flex;align-items:center;justify-content:space-between}
+.view-all{font-size:10px;color:var(--color-text-info);cursor:pointer;text-transform:none;font-weight:400;letter-spacing:0}
+.view-all:hover{text-decoration:underline}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px}
+
+.lr{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .1s}
+.lr:last-child{border-bottom:none}
+.lr:hover{opacity:.8}
+.lr-name{font-size:12.5px;font-weight:500;color:var(--color-text-primary);line-height:1.2}
+.lr-meta{font-size:10px;color:var(--color-text-tertiary)}
+
+.pill{display:inline-flex;align-items:center;font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;line-height:1.4}
+.p-hot{background:#FAECE7;color:#993C1D}
+.p-warm{background:#FAEEDA;color:#854F0B}
+.p-cold{background:#E6F1FB;color:#185FA5}
+.p-new{background:#F1EFE8;color:#5F5E5A}
+.p-booked{background:#EAF3DE;color:#3B6D11}
+.p-lost{background:#FCEBEB;color:#A32D2D}
+.p-ts{background:#EEEDFE;color:#534AB7}
+
+.btn{padding:5px 13px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);font-size:12px;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--color-background-secondary)}
+.btn:active{transform:scale(.98)}
+.btn-p{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.btn-p:hover{opacity:.85}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-danger{color:var(--color-text-danger);border-color:var(--color-border-danger)}
+
+.actions-bar{display:flex;align-items:center;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.search-in{padding:5px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12px;min-width:180px}
+.sel{padding:5px 8px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:11px;cursor:pointer}
+
+.leads-tbl{width:100%;border-collapse:collapse;table-layout:fixed}
+.leads-tbl th{font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:left;padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);text-transform:uppercase;letter-spacing:.03em}
+.leads-tbl td{font-size:12px;padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle;color:var(--color-text-primary)}
+.leads-tbl tr{cursor:pointer;transition:all .08s}
+.leads-tbl tbody tr:hover td{background:var(--color-background-secondary)}
+.temp-stripe{width:3px;border-radius:0}
+
+.kanban{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
+.kol{min-width:148px;flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 7px}
+.kol-hdr{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
+.kol-cnt{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:1px 5px;font-size:10px;color:var(--color-text-tertiary)}
+.kc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:9px 10px;margin-bottom:5px;cursor:pointer;border-left:3px solid transparent;transition:all .1s}
+.kc:hover{border-color:var(--color-border-primary) !important;transform:translateY(-1px)}
+.kc-name{font-size:12px;font-weight:500;margin-bottom:2px}
+.kc-meta{font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px}
+.kc-foot{display:flex;align-items:center;justify-content:space-between}
+
+.ow-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0}
+
+.tour-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 13px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:11px;transition:all .1s;border-left:3px solid transparent}
+.tour-card:hover{background:var(--color-background-secondary)}
+
+.inv-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.inv-row:last-child{border-bottom:none}
+.inv-bars{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.inv-bar-row{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--color-text-tertiary)}
+.inv-bar-track{flex:1;height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.inv-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+
+.dp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.dp-section{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin:12px 0 7px}
+.dp-kv{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.dp-kv:last-child{border-bottom:none}
+.dp-k{font-size:11px;color:var(--color-text-tertiary)}
+.dp-v{font-size:11px;color:var(--color-text-primary);font-weight:500}
+.stage-prog{display:flex;gap:2px;margin-bottom:2px}
+.sp-item{flex:1;height:3px;border-radius:2px;transition:background .2s}
+.tl-item{display:flex;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:7px;height:7px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.tl-txt{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.tl-time{font-size:10px;color:var(--color-text-tertiary)}
+.stage-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px}
+.sg-item{padding:5px 8px;border-radius:5px;border:0.5px solid var(--color-border-tertiary);font-size:11px;cursor:pointer;text-align:left;color:var(--color-text-secondary);background:transparent;transition:all .1s}
+.sg-item:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.sg-item.sg-cur{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+
+.modal-bg{display:none;position:absolute;inset:0;background:rgba(0,0,0,.3);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:18px;width:420px;max-height:90%;overflow-y:auto}
+.modal-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:14px}
+.fr{margin-bottom:10px}
+.fl{font-size:11px;color:var(--color-text-secondary);display:block;margin-bottom:3px}
+.fi{width:100%;padding:6px 9px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12.5px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.toast-wrap{position:absolute;bottom:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{background:var(--color-text-primary);color:var(--color-background-primary);border-radius:8px;padding:8px 14px;font-size:12px;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.kanban-stats{display:flex;gap:0;margin-bottom:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.ks-item{flex:1;padding:8px 10px;text-align:center;border-right:0.5px solid var(--color-border-tertiary)}
+.ks-item:last-child{border-right:none}
+.ks-val{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.ks-lbl{font-size:9px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em}
+</style>
+
+<h2 class="sr-only">Gharpayy Lead CRM — elite MVP with pipeline charts, score rings, and activity timeline</h2>
+
+<div class="crm" id="crm" style="position:relative">
+<div class="sb">
+  <div class="sb-logo">
+    <div class="sb-brand"><span class="sb-dot"></span>Gharpayy</div>
+    <div class="sb-sub">Arena infrastructure · Bengaluru</div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-section">Workspace</div>
+    <div class="ni on" data-p="dashboard">
+      <span class="ni-ic"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg></span>
+      Dashboard
+    </div>
+    <div class="ni" data-p="leads">
+      <span class="ni-ic"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><circle cx="5.5" cy="4" r="2.5"/><path d="M0 12c0-2.5 2.5-4 5.5-4s5.5 1.5 5.5 4H0z"/><circle cx="11" cy="4.5" r="2"/><path d="M11 8.5c1.5.3 3 1.3 3 3h-3"/></svg></span>
+      All leads
+      <span class="ni-badge" id="nb-leads">23</span>
+    </div>
+    <div class="ni" data-p="pipeline">
+      <span class="ni-ic"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="3" width="3" height="8" rx="1"/><rect x="5.5" y="4.5" width="3" height="5" rx="1" opacity=".75"/><rect x="10" y="6" width="3" height="2" rx="1" opacity=".5"/></svg></span>
+      Pipeline
+    </div>
+    <div class="sb-section">Ops</div>
+    <div class="ni" data-p="schedule">
+      <span class="ni-ic"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="2.5" width="12" height="10" rx="1.5"/><path d="M1 5.5h12M4.5 1v3M9.5 1v3"/></svg></span>
+      Schedule
+      <span class="ni-badge ni-badge-blue" id="nb-tours">5</span>
+    </div>
+    <div class="ni" data-p="inventory">
+      <span class="ni-ic"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1L1 5v8h4V9h4v4h4V5L7 1z"/></svg></span>
+      Inventory
+    </div>
+  </div>
+  <div class="sb-user">
+    <div class="ow-dot" style="background:#E6F1FB;color:#185FA5;width:26px;height:26px">RI</div>
+    <div>
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Riya Iyer</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">Flow ops</div>
+    </div>
+  </div>
+</div>
+
+<div class="crm-main">
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-title" id="tb-title">Dashboard</div>
+    <div class="tb-sep"></div>
+    <div class="tb-sub" id="tb-sub">Today's overview</div>
+  </div>
+  <div class="tb-right">
+    <button class="btn btn-sm" onclick="openScheduleTour(null)">+ Tour</button>
+    <button class="btn btn-sm btn-p" onclick="openAddLead()">+ Lead</button>
+  </div>
+</div>
+<div class="crm-body">
+<div class="content">
+
+<div class="page on" id="page-dashboard">
+  <div class="metrics" id="d-metrics"></div>
+  <div class="funnel-wrap">
+    <div class="funnel-title">Pipeline conversion</div>
+    <div class="funnel-stages" id="d-funnel"></div>
+  </div>
+  <div class="dash-grid">
+    <div class="card">
+      <div class="section-label">Hot pipeline <span class="view-all" onclick="goPage('leads')">View all</span></div>
+      <div id="d-hot"></div>
+    </div>
+    <div class="card">
+      <div class="section-label">Today's tours <span class="view-all" onclick="goPage('schedule')">View all</span></div>
+      <div id="d-tours"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-label" style="margin-bottom:9px">Overdue actions <span style="font-weight:400;font-size:10px;color:var(--color-text-danger);letter-spacing:0;text-transform:none">Auto-escalation at 6h</span></div>
+    <div id="d-overdue"></div>
+  </div>
+</div>
+
+<div class="page" id="page-leads">
+  <div class="actions-bar">
+    <input class="search-in" type="text" placeholder="Search name or phone..." id="ls-q" oninput="renderLeads()">
+    <select class="sel" id="ls-temp" onchange="renderLeads()"><option value="">All temps</option><option>Hot</option><option>Warm</option><option>Cold</option></select>
+    <select class="sel" id="ls-status" onchange="renderLeads()"><option value="">All stages</option><option>New</option><option>Contacted</option><option>Tour Scheduled</option><option>Tour Done</option><option>Negotiation</option><option>Booked</option><option>Lost</option></select>
+    <select class="sel" id="ls-owner" onchange="renderLeads()"><option value="">All owners</option></select>
+    <span style="font-size:11px;color:var(--color-text-tertiary)" id="ls-count"></span>
+  </div>
+  <div style="overflow-x:auto">
+    <table class="leads-tbl">
+      <thead><tr>
+        <th style="width:3px;padding:0"></th>
+        <th style="width:30%">Lead</th>
+        <th style="width:20%">Property</th>
+        <th style="width:15%">Stage</th>
+        <th style="width:8%">Temp</th>
+        <th style="width:10%">Score</th>
+        <th style="width:12%">Owner</th>
+      </tr></thead>
+      <tbody id="leads-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="page" id="page-pipeline">
+  <div class="kanban-stats" id="k-stats"></div>
+  <div class="kanban" id="kanban"></div>
+</div>
+
+<div class="page" id="page-schedule">
+  <div class="actions-bar">
+    <button class="btn btn-sm btn-p" onclick="openScheduleTour(null)">+ Schedule tour</button>
+    <select class="sel" id="sc-date" onchange="renderSchedule()"><option value="today">Today</option><option value="all">All upcoming</option></select>
+    <select class="sel" id="sc-prop" onchange="renderSchedule()"><option value="">All properties</option></select>
+  </div>
+  <div id="sched-list"></div>
+</div>
+
+<div class="page" id="page-inventory">
+  <div class="card" style="margin-bottom:10px">
+    <div id="inv-list"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="dp" id="dp">
+  <div class="dp-inner" id="dp-inner"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal-bg" id="m-lead">
+<div class="modal">
+  <div class="modal-title">Add new lead</div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Full name</label><input class="fi" id="f-name" placeholder="Karthik R."></div>
+    <div class="fr"><label class="fl">Phone</label><input class="fi" id="f-phone" placeholder="+91 98765 xxxxx"></div>
+  </div>
+  <div class="fr"><label class="fl">Email</label><input class="fi" id="f-email" placeholder="email@example.com"></div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Property interest</label><select class="fi" id="f-prop"><option>Koramangala 5B</option><option>Koramangala 8B</option><option>Indiranagar 100ft</option><option>HSR Sector 2</option><option>Whitefield ITPL</option><option>BTM 2nd Stage</option></select></div>
+    <div class="fr"><label class="fl">Source</label><select class="fi" id="f-src"><option>Inbound</option><option>Referral</option><option>Walk-in</option><option>Instagram</option><option>Marketplace</option></select></div>
+  </div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Assign owner</label><select class="fi" id="f-owner"></select></div>
+    <div class="fr"><label class="fl">Budget (₹/mo)</label><input class="fi" id="f-budget" placeholder="9000"></div>
+  </div>
+  <div class="fr"><label class="fl">Notes</label><textarea class="fi" id="f-notes" rows="2" style="resize:none"></textarea></div>
+  <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:4px">
+    <button class="btn" onclick="closeModal('m-lead')">Cancel</button>
+    <button class="btn btn-p" onclick="saveLead()">Save lead</button>
+  </div>
+</div>
+</div>
+
+<div class="modal-bg" id="m-tour">
+<div class="modal">
+  <div class="modal-title">Schedule a tour</div>
+  <div class="fr"><label class="fl">Lead</label><select class="fi" id="t-lead"></select></div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Date</label><input class="fi" type="date" id="t-date"></div>
+    <div class="fr"><label class="fl">Time</label><input class="fi" type="time" id="t-time" value="11:00"></div>
+  </div>
+  <div class="fr"><label class="fl">Property</label><select class="fi" id="t-prop"><option>Koramangala 5B</option><option>Koramangala 8B</option><option>Indiranagar 100ft</option><option>HSR Sector 2</option><option>Whitefield ITPL</option><option>BTM 2nd Stage</option></select></div>
+  <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:4px">
+    <button class="btn" onclick="closeModal('m-tour')">Cancel</button>
+    <button class="btn btn-p" onclick="saveTour()">Confirm tour</button>
+  </div>
+</div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+const STAGES=['New','Contacted','Tour Scheduled','Tour Done','Negotiation','Booked','Lost'];
+const OWN=[
+  {id:'AM',name:'Arjun Mehra',bg:'#FAECE7',tc:'#993C1D'},
+  {id:'RI',name:'Riya Iyer',bg:'#E6F1FB',tc:'#185FA5'},
+  {id:'PS',name:'Priya Singh',bg:'#EAF3DE',tc:'#3B6D11'},
+  {id:'SM',name:'Sanjay Mehta',bg:'#EEEDFE',tc:'#534AB7'}
+];
+const PROPS=[
+  {name:'Koramangala 5B',loc:'Koramangala',total:24,vacant:6,demand:80,pressure:58},
+  {name:'Indiranagar 100ft',loc:'Indiranagar',total:18,vacant:9,demand:82,pressure:69},
+  {name:'HSR Sector 2',loc:'HSR Layout',total:12,vacant:2,demand:62,pressure:44},
+  {name:'Whitefield ITPL',loc:'Whitefield',total:32,vacant:14,demand:60,pressure:54},
+  {name:'BTM 2nd Stage',loc:'BTM',total:16,vacant:1,demand:12,pressure:10},
+  {name:'Koramangala 8B',loc:'Koramangala',total:28,vacant:3,demand:84,pressure:55}
+];
+const TEMP_COLORS={Hot:'#D85A30',Warm:'#BA7517',Cold:'#378ADD'};
+const TEMP_BG={Hot:'#FAECE7',Warm:'#FAEEDA',Cold:'#E6F1FB'};
+const TEMP_TC={Hot:'#993C1D',Warm:'#854F0B',Cold:'#185FA5'};
+
+let leads=[
+  {id:1,name:'Karthik R.',phone:'+91 98765 12345',email:'karthik@email.com',prop:'Koramangala 5B',src:'Inbound',status:'Tour Scheduled',temp:'Hot',score:97,owner:'AM',budget:'9000',notes:'Looking for triple sharing',created:'Apr 28',tourDate:'today',tourTime:'11:30 AM',activity:['Tour scheduled for today 11:30AM','Contacted via WhatsApp','Lead created from inbound']},
+  {id:2,name:'Mohit J.',phone:'+91 97654 99021',email:'mohit@email.com',prop:'Koramangala 5B',src:'Referral',status:'Tour Done',temp:'Hot',score:84,owner:'AM',budget:'10000',notes:'Preferred ground floor',created:'Apr 27',tourDate:'yesterday',tourTime:'2:00 PM',activity:['Tour completed · waiting on feedback','Tour scheduled','Contacted × 2','Lead created']},
+  {id:3,name:'Divya N.',phone:'+91 95432 22334',email:'divya@email.com',prop:'Koramangala 8B',src:'Instagram',status:'Tour Done',temp:'Hot',score:77,owner:'AM',budget:'8500',notes:'Post-tour form pending',created:'Apr 26',tourDate:'yesterday',tourTime:'4:30 PM',activity:['Tour done · post-form overdue 12h','Tour confirmed','Dm on Instagram']},
+  {id:4,name:'Sanjay P.',phone:'+91 99001 41001',email:'sanjay@email.com',prop:'Indiranagar 100ft',src:'Marketplace',status:'Negotiation',temp:'Hot',score:99,owner:'AM',budget:'12000',notes:'Negotiating on rent — ₹500 gap',created:'Apr 25',tourDate:'3d ago',tourTime:'',activity:['In negotiation · ₹500 gap on pricing','Tour done — very positive','Showed 2 rooms','Lead created']},
+  {id:5,name:'Nitya K.',phone:'+91 98712 71200',email:'nitya@email.com',prop:'HSR Sector 2',src:'Walk-in',status:'Tour Done',temp:'Hot',score:84,owner:'AM',budget:'9500',notes:'Very interested, comparing options',created:'Apr 27',tourDate:'yesterday',tourTime:'5:00 PM',activity:['Tour done · comparing 2 PGs','Walk-in lead added']},
+  {id:6,name:'Tanya M.',phone:'+91 99001 55321',email:'tanya@email.com',prop:'Koramangala 5B',src:'Inbound',status:'Tour Done',temp:'Warm',score:60,owner:'PS',budget:'8000',notes:'Post-tour form pending 34h overdue',created:'Apr 24',tourDate:'2d ago',tourTime:'',activity:['Post-tour form pending 34h','Tour completed','Inbound call followed up']},
+  {id:7,name:'Riya D.',phone:'+91 91234 66789',email:'riya@email.com',prop:'Whitefield ITPL',src:'Referral',status:'Tour Done',temp:'Hot',score:78,owner:'PS',budget:'8000',notes:'Post-tour form pending 12h',created:'Apr 26',tourDate:'yesterday',tourTime:'3:30 PM',activity:['Post-tour form overdue 12h','Tour done','Referral from existing tenant']},
+  {id:8,name:'Faisal N.',phone:'+91 95678 33221',email:'faisal@email.com',prop:'BTM 2nd Stage',src:'Inbound',status:'New',temp:'Cold',score:28,owner:'RI',budget:'7000',notes:'First response overdue · 5 days',created:'Apr 23',tourDate:'',tourTime:'',activity:['First response overdue · 5d','Lead created from inbound form']},
+  {id:9,name:'Arjun K.',phone:'+91 96543 88990',email:'arjunK@email.com',prop:'Koramangala 8B',src:'Instagram',status:'New',temp:'Warm',score:48,owner:'RI',budget:'9000',notes:'First response overdue 2h',created:'Apr 30',tourDate:'',tourTime:'',activity:['First response overdue · 2h','Lead captured via Instagram DM']},
+  {id:10,name:'Manish T.',phone:'+91 97654 22100',email:'manish@email.com',prop:'HSR Sector 2',src:'Marketplace',status:'Contacted',temp:'Cold',score:32,owner:'RI',budget:'8000',notes:'Ghost — no reply in 8 days',created:'Apr 20',tourDate:'',tourTime:'',activity:['No response in 8 days','Followed up × 3','Initial contact made']},
+  {id:11,name:'Aakash B.',phone:'+91 98001 44556',email:'aakash@email.com',prop:'Koramangala 8B',src:'Referral',status:'Tour Scheduled',temp:'Warm',score:62,owner:'SM',budget:'9500',notes:'',created:'Apr 29',tourDate:'today',tourTime:'5:00 PM',activity:['Tour confirmed 5PM today','Contacted via call','Lead added']},
+  {id:12,name:'Reema A.',phone:'+91 95001 77889',email:'reema@email.com',prop:'HSR Sector 2',src:'Walk-in',status:'Tour Scheduled',temp:'Warm',score:55,owner:'RI',budget:'8500',notes:'',created:'Apr 29',tourDate:'today',tourTime:'3:30 PM',activity:['Tour confirmed 3:30PM today','Walk-in enquiry']},
+  {id:13,name:'Sneha P.',phone:'+91 93456 11200',email:'sneha@email.com',prop:'Whitefield ITPL',src:'Instagram',status:'Tour Scheduled',temp:'Warm',score:58,owner:'PS',budget:'8000',notes:'',created:'Apr 28',tourDate:'today',tourTime:'4:00 PM',activity:['Tour confirmed 4PM today','Followed up on DM','Instagram lead']},
+  {id:14,name:'Ritika G.',phone:'+91 99001 88990',email:'ritika@email.com',prop:'Whitefield ITPL',src:'Inbound',status:'Tour Scheduled',temp:'Warm',score:61,owner:'RI',budget:'9000',notes:'',created:'Apr 28',tourDate:'today',tourTime:'6:00 PM',activity:['Tour confirmed 6PM today','Inbound call']},
+  {id:15,name:'Pranav S.',phone:'+91 98765 55432',email:'pranav@email.com',prop:'BTM 2nd Stage',src:'Referral',status:'Contacted',temp:'Warm',score:60,owner:'SM',budget:'7500',notes:'Silent 2 days',created:'Apr 25',tourDate:'',tourTime:'',activity:['No reply 2d · resurrection needed','Contacted via WhatsApp','Referral lead']},
+  {id:16,name:'Neha R.',phone:'+91 97001 33445',email:'neha@email.com',prop:'Indiranagar 100ft',src:'Inbound',status:'Contacted',temp:'Cold',score:38,owner:'SM',budget:'11000',notes:'',created:'Apr 22',tourDate:'',tourTime:'',activity:['Followed up — low intent signals','Inbound enquiry']},
+  {id:17,name:'Vikram S.',phone:'+91 95001 22334',email:'vikram@email.com',prop:'Koramangala 5B',src:'Marketplace',status:'Booked',temp:'Hot',score:95,owner:'AM',budget:'9000',notes:'Booked room 201 · ₹9000/mo',created:'Apr 15',tourDate:'',tourTime:'',activity:['BOOKED · Room 201 · ₹9k/mo','Negotiation completed','Tour done · loved it','Tour completed']},
+  {id:18,name:'Anita P.',phone:'+91 98001 11223',email:'anita@email.com',prop:'Indiranagar 100ft',src:'Walk-in',status:'Lost',temp:'Cold',score:15,owner:'RI',budget:'7000',notes:'Budget mismatch · ₹4k gap',created:'Apr 10',tourDate:'',tourTime:'',activity:['Marked lost · budget mismatch','Tour done — negative','Walk-in']},
+  {id:19,name:'Rohan M.',phone:'+91 96001 55678',email:'rohan@email.com',prop:'Koramangala 8B',src:'Instagram',status:'New',temp:'Warm',score:50,owner:'SM',budget:'8500',notes:'',created:'May 01',tourDate:'',tourTime:'',activity:['New lead · first response needed','Instagram DM']},
+  {id:20,name:'Ishaan T.',phone:'+91 97654 33100',email:'ishaan@email.com',prop:'HSR Sector 2',src:'Inbound',status:'Contacted',temp:'Hot',score:72,owner:'AM',budget:'9000',notes:'',created:'Apr 29',tourDate:'',tourTime:'',activity:['Contacted · high intent call','Inbound lead']},
+  {id:21,name:'Kavya N.',phone:'+91 98432 66789',email:'kavya@email.com',prop:'Whitefield ITPL',src:'Referral',status:'Tour Done',temp:'Warm',score:65,owner:'PS',budget:'8000',notes:'',created:'Apr 27',tourDate:'yesterday',tourTime:'1:00 PM',activity:['Tour done · follow-up pending','Referral via tenant']},
+  {id:22,name:'Dev R.',phone:'+91 99001 22334',email:'dev@email.com',prop:'BTM 2nd Stage',src:'Walk-in',status:'New',temp:'Cold',score:20,owner:'RI',budget:'7000',notes:'',created:'May 01',tourDate:'',tourTime:'',activity:['New lead added','Walk-in enquiry']},
+  {id:23,name:'Meera K.',phone:'+91 95678 44556',email:'meera@email.com',prop:'Indiranagar 100ft',src:'Instagram',status:'Contacted',temp:'Warm',score:45,owner:'SM',budget:'10000',notes:'',created:'Apr 28',tourDate:'',tourTime:'',activity:['Contacted via WhatsApp','Instagram lead captured']},
+];
+let nextId=24;
+let currentPage='dashboard';
+
+function ow(id){return OWN.find(o=>o.id===id)||OWN[0]}
+function tc(temp){return temp==='Hot'?'hot':temp==='Warm'?'warm':'cold'}
+function scoreRing(score,temp){
+  const r=11,circ=2*Math.PI*r,fill=(score/100)*circ;
+  const c=TEMP_COLORS[temp]||'#888';
+  const b=TEMP_BG[temp]||'#F1EFE8';
+  return`<svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="${r}" fill="none" stroke="${b}" stroke-width="2.5"/><circle cx="14" cy="14" r="${r}" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="${fill.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 14 14)"/><text x="14" y="18" text-anchor="middle" font-size="8" fill="${c}" font-weight="500" font-family="sans-serif">${score}</text></svg>`;
+}
+function pill(temp){return`<span class="pill p-${tc(temp)}">${temp}</span>`}
+function stagePill(s){
+  const cls=s==='Booked'?'p-booked':s==='Lost'?'p-lost':s==='Tour Scheduled'?'p-ts':'p-new';
+  return`<span class="pill ${cls}">${s}</span>`;
+}
+function initials(name){return name.split(' ').map(x=>x[0]).join('')}
+function av(name,temp,size=28){
+  const b=TEMP_BG[temp]||'#F1EFE8',c=TEMP_TC[temp]||'#5F5E5A';
+  return`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${b};color:${c};display:flex;align-items:center;justify-content:center;font-size:${size<30?10:12}px;font-weight:500;flex-shrink:0">${initials(name)}</div>`;
+}
+function ownerDot(id){
+  const o=ow(id);
+  return`<div class="ow-dot" style="background:${o.bg};color:${o.tc}">${o.id}</div>`;
+}
+function toast(msg){
+  const w=document.getElementById('toast-wrap');
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  w.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2200);
+}
+
+function goPage(p){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('on',n.dataset.p===p));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+  currentPage=p;
+  const titles={dashboard:'Dashboard',leads:'All leads',pipeline:'Pipeline',schedule:'Schedule',inventory:'Inventory'};
+  const subs={dashboard:"Today's overview · live",leads:'Search, filter, assign ownership',pipeline:'Visual stage management',schedule:"Tour management · today's visits",inventory:'Property occupancy & demand pressure'};
+  document.getElementById('tb-title').textContent=titles[p];
+  document.getElementById('tb-sub').textContent=subs[p];
+  if(p==='dashboard')renderDashboard();
+  if(p==='leads')renderLeads();
+  if(p==='pipeline')renderPipeline();
+  if(p==='schedule')renderSchedule();
+  if(p==='inventory')renderInventory();
+  closeDP();
+}
+document.querySelectorAll('.ni').forEach(n=>n.onclick=()=>goPage(n.dataset.p));
+
+function renderDashboard(){
+  const active=leads.filter(l=>l.status!=='Booked'&&l.status!=='Lost');
+  const hot=active.filter(l=>l.temp==='Hot');
+  const tours=leads.filter(l=>l.tourDate==='today');
+  const overdue=active.filter(l=>l.status==='New'||l.status==='Tour Done').slice(0,4);
+  document.getElementById('nb-leads').textContent=active.length;
+  document.getElementById('nb-tours').textContent=tours.length;
+  const sparkData=[12,18,14,22,19,23,active.length];
+  const sparkMax=Math.max(...sparkData);
+  function spark(data,color){
+    const bw=7,h=18,gap=2;
+    const bars=data.map((v,i)=>{const bh=Math.max(3,(v/sparkMax)*h);return`<rect x="${i*(bw+gap)}" y="${h-bh}" width="${bw}" height="${bh}" rx="1" fill="${color}" opacity="${i===data.length-1?1:.5}"/>`}).join('');
+    return`<svg width="${data.length*(bw+gap)}" height="${h}">${bars}</svg>`;
+  }
+  document.getElementById('d-metrics').innerHTML=`
+    <div class="mc"><div class="mc-top"><div class="mc-label">Active leads</div>${spark(sparkData,'#378ADD')}</div><div class="mc-val">${active.length}</div><div class="mc-sub mc-trend-up">+3 this week</div></div>
+    <div class="mc"><div class="mc-top"><div class="mc-label">Hot leads</div>${spark([6,9,8,11,10,12,hot.length],'#D85A30')}</div><div class="mc-val">${hot.length}</div><div class="mc-sub mc-trend-up">+2 this week</div></div>
+    <div class="mc"><div class="mc-top"><div class="mc-label">Today's tours</div>${spark([1,3,2,4,3,5,tours.length],'#534AB7')}</div><div class="mc-val">${tours.length}</div><div class="mc-sub" style="color:var(--color-text-tertiary)">Scheduled today</div></div>
+    <div class="mc"><div class="mc-top"><div class="mc-label">Conversion</div>${spark([4,5,5,6,6,7,7],'#3B6D11')}</div><div class="mc-val">7%</div><div class="mc-sub mc-trend-up">1 booked total</div></div>
+  `;
+  const funnelStages=['New','Contacted','Tour Scheduled','Tour Done','Negotiation','Booked'];
+  const counts=funnelStages.map(s=>leads.filter(l=>l.status===s).length);
+  const maxC=Math.max(...counts,1);
+  let fhtml='';
+  counts.forEach((c,i)=>{
+    const barH=Math.max(8,Math.round((c/maxC)*38));
+    const col=i===5?'#639922':i===0?'#B4B2A9':i<=1?'#378ADD':i<=3?'#534AB7':'#D85A30';
+    fhtml+=`<div class="fs"><div class="fs-bar-wrap"><div class="fs-bar" style="height:${barH}px;background:${col}"></div></div><div class="fs-count">${c}</div><div class="fs-label" style="font-size:9px">${funnelStages[i].replace('Tour ','').replace('Scheduled','Sched.')}</div></div>`;
+    if(i<counts.length-1){
+      const conv=counts[i]>0?Math.round((counts[i+1]/counts[i])*100):0;
+      fhtml+=`<div class="fs-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1"><path d="M3 7h8M7 4l4 3-4 3"/></svg><div class="fs-conv">${conv}%</div></div>`;
+    }
+  });
+  document.getElementById('d-funnel').innerHTML=fhtml;
+  const hotLeads=hot.filter(l=>l.status!=='Booked').sort((a,b)=>b.score-a.score).slice(0,5);
+  document.getElementById('d-hot').innerHTML=hotLeads.map(l=>`
+    <div class="lr" onclick="openDP(${l.id})" style="border-left:3px solid ${TEMP_COLORS[l.temp]};padding-left:8px;margin-left:-8px">
+      ${av(l.name,l.temp)}
+      <div style="flex:1;min-width:0">
+        <div class="lr-name">${l.name}</div>
+        <div class="lr-meta">${l.prop} · ${l.status}</div>
+      </div>
+      ${scoreRing(l.score,l.temp)}
+    </div>`).join('');
+  const todayTours=tours.sort((a,b)=>a.tourTime.localeCompare(b.tourTime));
+  document.getElementById('d-tours').innerHTML=todayTours.length?todayTours.map(l=>`
+    <div class="lr" onclick="openDP(${l.id})">
+      <div style="font-size:11px;font-weight:500;min-width:58px;color:var(--color-text-primary)">${l.tourTime}</div>
+      <div style="flex:1;min-width:0"><div class="lr-name">${l.name}</div><div class="lr-meta">${l.prop}</div></div>
+      ${pill(l.temp)}
+    </div>`).join('')
+    :'<div style="font-size:12px;color:var(--color-text-tertiary);padding:8px 0">No tours today</div>';
+  document.getElementById('d-overdue').innerHTML=overdue.map(l=>{
+    const reason=l.status==='New'?'First response needed':'Post-tour form pending';
+    return`<div class="lr" onclick="openDP(${l.id})">
+      ${av(l.name,l.temp)}
+      <div style="flex:1;min-width:0">
+        <div class="lr-name">${l.name}</div>
+        <div class="lr-meta" style="color:var(--color-text-danger)">${reason}</div>
+      </div>
+      ${pill(l.temp)}
+    </div>`;}).join('');
+}
+
+function renderLeads(){
+  const q=(document.getElementById('ls-q').value||'').toLowerCase();
+  const ft=document.getElementById('ls-temp').value;
+  const fs=document.getElementById('ls-status').value;
+  const fo=document.getElementById('ls-owner').value;
+  const oe=document.getElementById('ls-owner');
+  if(!oe.dataset.set){oe.innerHTML='<option value="">All owners</option>'+OWN.map(o=>`<option value="${o.id}">${o.name}</option>`).join('');oe.dataset.set='1';}
+  const fil=leads.filter(l=>{
+    if(q&&!l.name.toLowerCase().includes(q)&&!l.phone.includes(q))return false;
+    if(ft&&l.temp!==ft)return false;
+    if(fs&&l.status!==fs)return false;
+    if(fo&&l.owner!==fo)return false;
+    return true;
+  });
+  document.getElementById('ls-count').textContent=`${fil.length} lead${fil.length!==1?'s':''}`;
+  document.getElementById('leads-tbody').innerHTML=fil.map(l=>`
+    <tr onclick="openDP(${l.id})">
+      <td class="temp-stripe" style="background:${TEMP_COLORS[l.temp]};padding:0;width:3px"></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${av(l.name,l.temp,24)}
+          <div>
+            <div style="font-size:12.5px;font-weight:500">${l.name}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary)">${l.phone} · ${l.src}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-size:11px;color:var(--color-text-secondary)">${l.prop}</td>
+      <td>${stagePill(l.status)}</td>
+      <td>${pill(l.temp)}</td>
+      <td>${scoreRing(l.score,l.temp)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:5px">
+          ${ownerDot(l.owner)}
+          <span style="font-size:11px;color:var(--color-text-secondary)">${ow(l.owner).name.split(' ')[0]}</span>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderPipeline(){
+  const active=leads.filter(l=>l.status!=='Lost');
+  document.getElementById('k-stats').innerHTML=
+    ['Hot','Warm','Cold'].map(t=>{const c=leads.filter(l=>l.temp===t&&l.status!=='Booked'&&l.status!=='Lost').length;
+    return`<div class="ks-item"><div class="ks-val" style="color:${TEMP_COLORS[t]}">${c}</div><div class="ks-lbl">${t}</div></div>`;}).join('')+
+    `<div class="ks-item"><div class="ks-val" style="color:#3B6D11">${leads.filter(l=>l.status==='Booked').length}</div><div class="ks-lbl">Booked</div></div>`+
+    `<div class="ks-item"><div class="ks-val">${Math.round(leads.filter(l=>l.status==='Booked').length/leads.length*100)}%</div><div class="ks-lbl">Conversion</div></div>`;
+  const board=document.getElementById('kanban');board.innerHTML='';
+  STAGES.forEach(s=>{
+    const sl=leads.filter(l=>l.status===s);
+    const col=document.createElement('div');col.className='kol';
+    col.innerHTML=`<div class="kol-hdr"><span>${s}</span><span class="kol-cnt">${sl.length}</span></div>`;
+    sl.forEach(l=>{
+      const kc=document.createElement('div');kc.className='kc';
+      kc.style.borderLeftColor=TEMP_COLORS[l.temp];
+      const o=ow(l.owner);
+      kc.innerHTML=`<div class="kc-name">${l.name}</div>
+        <div class="kc-meta">${l.prop}</div>
+        <div class="kc-foot">${pill(l.temp)}<div style="display:flex;align-items:center;gap:4px"><span style="font-size:9px;color:var(--color-text-tertiary)">${l.score}</span>${scoreRing(l.score,l.temp)}</div></div>`;
+      kc.onclick=()=>openDP(l.id);col.appendChild(kc);
+    });
+    board.appendChild(col);
+  });
+}
+
+function renderSchedule(){
+  const df=document.getElementById('sc-date').value;
+  const pf=document.getElementById('sc-prop').value;
+  const pe=document.getElementById('sc-prop');
+  if(!pe.dataset.set){pe.innerHTML='<option value="">All properties</option>'+PROPS.map(p=>`<option>${p.name}</option>`).join('');pe.dataset.set='1';}
+  let fil=leads.filter(l=>l.tourDate&&l.tourDate!=='');
+  if(df==='today')fil=fil.filter(l=>l.tourDate==='today');
+  if(pf)fil=fil.filter(l=>l.prop===pf);
+  fil.sort((a,b)=>a.tourTime.localeCompare(b.tourTime));
+  if(!fil.length){document.getElementById('sched-list').innerHTML='<div style="font-size:13px;color:var(--color-text-tertiary);padding:16px 0">No tours for this filter.</div>';return;}
+  const byProp={};fil.forEach(l=>{if(!byProp[l.prop])byProp[l.prop]=[];byProp[l.prop].push(l);});
+  let html='';
+  Object.entries(byProp).forEach(([prop,ls])=>{
+    const inv=PROPS.find(p=>p.name===prop);
+    html+=`<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin:14px 0 7px;display:flex;align-items:center;gap:8px">${prop}${inv?`<span style="font-weight:400;color:var(--color-text-tertiary);text-transform:none;letter-spacing:0">${inv.vacant} vacant · ${inv.total} total</span>`:''}</div>`;
+    ls.forEach(l=>{
+      const o=ow(l.owner);
+      html+=`<div class="tour-card" style="border-left-color:${TEMP_COLORS[l.temp]}" onclick="openDP(${l.id})">
+        <div style="font-size:13px;font-weight:500;min-width:64px;color:var(--color-text-primary)">${l.tourTime||'TBD'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:500;color:var(--color-text-primary)">${l.name}</div>
+          <div style="font-size:10px;color:var(--color-text-tertiary)">${l.phone} · via ${l.src}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px">
+          ${ownerDot(l.owner)}
+          ${pill(l.temp)}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('sched-list').innerHTML=html;
+}
+
+function renderInventory(){
+  document.getElementById('inv-list').innerHTML=PROPS.map(p=>{
+    const occ=Math.round(((p.total-p.vacant)/p.total)*100);
+    const pc=p.pressure>60?'#D85A30':p.pressure>35?'#BA7517':'#639922';
+    return`<div class="inv-row">
+      <div style="min-width:0;flex:1.2">
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${p.name}</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">${p.loc} · ${p.total-p.vacant}/${p.total} occupied</div>
+      </div>
+      <div class="inv-bars" style="max-width:200px">
+        <div class="inv-bar-row"><span style="min-width:52px">Occupancy</span><div class="inv-bar-track"><div class="inv-bar-fill" style="width:${occ}%;background:#378ADD"></div></div><span style="min-width:28px;text-align:right">${occ}%</span></div>
+        <div class="inv-bar-row"><span style="min-width:52px">Demand</span><div class="inv-bar-track"><div class="inv-bar-fill" style="width:${p.demand}%;background:#534AB7"></div></div><span style="min-width:28px;text-align:right">${p.demand}</span></div>
+        <div class="inv-bar-row"><span style="min-width:52px">Pressure</span><div class="inv-bar-track"><div class="inv-bar-fill" style="width:${p.pressure}%;background:${pc}"></div></div><span style="min-width:28px;text-align:right;color:${pc}">${p.pressure}</span></div>
+      </div>
+    </div>`;}).join('');
+}
+
+function openDP(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const dp=document.getElementById('dp');dp.classList.add('open');
+  const stageIdx=STAGES.indexOf(l.status);
+  const progBars=STAGES.filter(s=>s!=='Lost').map((s,i)=>{
+    const done=i<=stageIdx&&l.status!=='Lost';
+    return`<div class="sp-item" style="background:${done?TEMP_COLORS[l.temp]:'var(--color-border-tertiary)'}"></div>`;
+  }).join('');
+  const ownerOpts=OWN.map(o=>`<option value="${o.id}"${o.id===l.owner?' selected':''}>${o.name}</option>`).join('');
+  const stageGrid=STAGES.map(s=>`<button class="sg-item${s===l.status?' sg-cur':''}" onclick="setStage(${l.id},'${s}')">${s}</button>`).join('');
+  const tl=(l.activity||[]).map((a,i)=>{
+    const dots=['#D85A30','#BA7517','#378ADD','#3B6D11','#534AB7'];
+    return`<div class="tl-item"><div class="tl-dot" style="background:${dots[i%dots.length]}"></div><div><div class="tl-txt">${a}</div></div></div>`;
+  }).join('');
+  document.getElementById('dp-inner').innerHTML=`
+    <div class="dp-header">
+      <div style="display:flex;align-items:center;gap:9px">
+        ${av(l.name,l.temp,36)}
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${l.name}</div>
+          <div style="font-size:10px;color:var(--color-text-tertiary)">${l.phone}</div>
+        </div>
+      </div>
+      <button class="btn btn-sm" onclick="closeDP()" style="flex-shrink:0">&#215;</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+      ${pill(l.temp)}
+      ${stagePill(l.status)}
+      ${scoreRing(l.score,l.temp)}
+      <span style="font-size:10px;color:var(--color-text-tertiary)">score ${l.score}/100</span>
+    </div>
+    <div class="stage-prog">${progBars}</div>
+    <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:10px">${l.status} · stage ${Math.max(1,stageIdx+1)} of ${STAGES.length-1}</div>
+    <div style="border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:2px">
+      <div class="dp-kv"><span class="dp-k">Property</span><span class="dp-v">${l.prop}</span></div>
+      <div class="dp-kv"><span class="dp-k">Budget</span><span class="dp-v">₹${Number(l.budget||0).toLocaleString()}/mo</span></div>
+      <div class="dp-kv"><span class="dp-k">Source</span><span class="dp-v">${l.src}</span></div>
+      <div class="dp-kv"><span class="dp-k">Created</span><span class="dp-v">${l.created}</span></div>
+      ${l.tourDate?`<div class="dp-kv"><span class="dp-k">Tour</span><span class="dp-v">${l.tourDate}${l.tourTime?' · '+l.tourTime:''}</span></div>`:''}
+    </div>
+    ${l.notes?`<div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary);margin:8px 0">${l.notes}</div>`:''}
+    <div class="dp-section">Assign owner</div>
+    <select class="fi" style="font-size:11px;width:100%" onchange="setOwner(${l.id},this.value)">${ownerOpts}</select>
+    <div class="dp-section">Move to stage</div>
+    <div class="stage-grid">${stageGrid}</div>
+    <div class="dp-section">Quick actions</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <button class="btn btn-sm" style="width:100%;justify-content:center" onclick="openScheduleTour(${l.id})">Schedule tour</button>
+      <button class="btn btn-sm btn-danger" style="width:100%;justify-content:center" onclick="setStage(${l.id},'Lost')">Mark as lost</button>
+    </div>
+    <div class="dp-section">Activity</div>
+    <div>${tl}</div>
+  `;
+}
+function closeDP(){document.getElementById('dp').classList.remove('open');}
+function setStage(id,s){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  if(l.activity)l.activity.unshift('Stage moved to '+s);
+  l.status=s;openDP(id);
+  if(currentPage==='pipeline')renderPipeline();
+  if(currentPage==='leads')renderLeads();
+  if(currentPage==='dashboard')renderDashboard();
+  toast('Moved to '+s);
+}
+function setOwner(id,oid){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  l.owner=oid;
+  const o=ow(oid);toast('Assigned to '+o.name);
+  if(currentPage==='leads')renderLeads();
+  if(currentPage==='pipeline')renderPipeline();
+}
+function openAddLead(){
+  document.getElementById('f-name').value='';document.getElementById('f-phone').value='';
+  document.getElementById('f-email').value='';document.getElementById('f-notes').value='';
+  document.getElementById('f-budget').value='';
+  document.getElementById('f-owner').innerHTML=OWN.map(o=>`<option value="${o.id}">${o.name}</option>`).join('');
+  document.getElementById('m-lead').classList.add('open');
+}
+function saveLead(){
+  const name=document.getElementById('f-name').value.trim();if(!name)return;
+  const l={id:nextId++,name,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),prop:document.getElementById('f-prop').value,src:document.getElementById('f-src').value,status:'New',temp:'Cold',score:Math.round(Math.random()*25+10),owner:document.getElementById('f-owner').value,budget:document.getElementById('f-budget').value,notes:document.getElementById('f-notes').value.trim(),created:'Today',tourDate:'',tourTime:'',activity:['Lead created']};
+  leads.unshift(l);closeModal('m-lead');toast('Lead added · '+name);
+  document.getElementById('nb-leads').textContent=leads.filter(x=>x.status!=='Booked'&&x.status!=='Lost').length;
+  if(currentPage==='leads')renderLeads();else if(currentPage==='dashboard')renderDashboard();else if(currentPage==='pipeline')renderPipeline();
+}
+function openScheduleTour(leadId){
+  const tl=document.getElementById('t-lead');
+  tl.innerHTML=leads.filter(l=>l.status!=='Booked'&&l.status!=='Lost').map(l=>`<option value="${l.id}"${l.id===leadId?' selected':''}>${l.name} · ${l.prop}</option>`).join('');
+  document.getElementById('t-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('m-tour').classList.add('open');
+}
+function saveTour(){
+  const lid=parseInt(document.getElementById('t-lead').value);
+  const l=leads.find(x=>x.id===lid);if(!l)return;
+  const time=document.getElementById('t-time').value;
+  const [h,m]=time.split(':');const ampm=+h>=12?'PM':'AM';
+  l.tourDate='today';l.tourTime=`${((+h%12)||12)}:${m} ${ampm}`;l.prop=document.getElementById('t-prop').value;
+  if(l.status==='New'||l.status==='Contacted')l.status='Tour Scheduled';
+  if(l.activity)l.activity.unshift('Tour scheduled · '+l.tourTime);
+  closeModal('m-tour');toast('Tour scheduled for '+l.name);
+  document.getElementById('nb-tours').textContent=leads.filter(x=>x.tourDate==='today').length;
+  if(currentPage==='schedule')renderSchedule();else if(currentPage==='dashboard')renderDashboard();else if(currentPage==='pipeline')renderPipeline();
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.getElementById('m-lead').onclick=e=>{if(e.target===document.getElementById('m-lead'))closeModal('m-lead');};
+document.getElementById('m-tour').onclick=e=>{if(e.target===document.getElementById('m-tour'))closeModal('m-tour');};
+renderDashboard();
+</script>
